@@ -1,0 +1,97 @@
+<collection xmlns="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+<record>
+<leader>00829cam a2200301 i 4500</leader>
+<controlfield tag="001">364795</controlfield>
+<controlfield tag="005">20190724015012.0</controlfield>
+<controlfield tag="008">850715s1974 nyu 000 1 eng </controlfield>
+<datafield ind1=" " ind2=" " tag="010">
+<subfield code="a"> 75004158 </subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="020">
+<subfield code="a">0814907636</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="035">
+<subfield code="a">(OCoLC)3879358</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="035">
+<subfield code="a">(OCoLC)ocm03879358</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="035">
+<subfield code="a">(CStRLIN)NYCG85-B67481</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="035">
+<subfield code="9">ABQ1838CU</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="035">
+<subfield code="a">(NNC)364795</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="035">
+<subfield code="a">364795</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="040">
+<subfield code="c">AzF</subfield>
+<subfield code="d">NNC</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="090">
+<subfield code="a">PR6053.R66</subfield>
+<subfield code="b">S6</subfield>
+</datafield>
+<datafield ind1="1" ind2=" " tag="100">
+<subfield code="a">Croxford, Leslie,</subfield>
+<subfield code="d">1944-</subfield>
+<subfield code="0">http://id.loc.gov/authorities/names/n83198517</subfield>
+</datafield>
+<datafield ind1="1" ind2="0" tag="245">
+<subfield code="a">Solomon's folly /</subfield>
+<subfield code="c">by Leslie Croxford.</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="260">
+<subfield code="a">New York :</subfield>
+<subfield code="b">Vanguard Press,</subfield>
+<subfield code="c">[1974]</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="300">
+<subfield code="a">206 pages ;</subfield>
+<subfield code="c">22 cm</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="336">
+<subfield code="a">text</subfield>
+<subfield code="2">rdacontent</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="337">
+<subfield code="a">unmediated</subfield>
+<subfield code="2">rdamedia</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="338">
+<subfield code="a">volume</subfield>
+<subfield code="2">rdacarrier</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="900">
+<subfield code="a">AUTH</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="965">
+<subfield code="a">(NNC)RECONB185</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="900">
+<subfield code="a">MARS</subfield>
+</datafield>
+<datafield ind1="0" ind2="0" tag="852">
+<subfield code="0">489125</subfield>
+<subfield code="b">off,glx</subfield>
+<subfield code="h">PR6053.R66</subfield>
+<subfield code="i">S6</subfield>
+</datafield>
+<datafield ind1=" " ind2=" " tag="959">
+<subfield code="a">2003-05-06 00:00:00 -0400</subfield>
+</datafield>
+<datafield ind1="0" ind2="0" tag="876">
+<subfield code="0">489125</subfield>
+<subfield code="3"/>
+<subfield code="a">506845</subfield>
+<subfield code="j">Not Charged</subfield>
+<subfield code="p">CU54865638</subfield>
+<subfield code="t">1</subfield>
+<subfield code='h'>In Library Use</subfield>
+</datafield>
+</record>
+</collection>

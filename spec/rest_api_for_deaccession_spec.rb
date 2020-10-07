@@ -53,4 +53,51 @@ describe 'deaccession' do
     expect(record['screenMessage']).to eq('Successfully Refiled')
     expect(record['body'].deAccessionItems[0].itemBarcode).to eq(true)
   end
+
+  describe 'Test 36' do
+    barcode = '33433063664720'
+    customer_code = 'NP'
+
+    after(:each) do
+      # Lastly, reaccession it:
+      post '/sharedCollection/accession', [
+        {
+          customerCode: customer_code,
+          itemBarcode: barcode
+        }
+      ]
+    end
+
+    it '36. Verify that if user trying to deaccession a single Item record which has multiple item and Holdings attached to it (bound-with) then application should update delete flag for corresponding item and the bib and holding records.', number:36 do
+
+      # Deaccession a single item from a multi-item bib:
+      response = post '/sharedCollection/deaccession', {
+        deAccessionItems: [
+          {
+            deliveryLocation: customer_code,
+            itemBarcode: barcode
+          }
+        ]
+      }
+
+      expect(response.code.to_i).to eq(200)
+      expect(response['Content-Type']).to match(/^application\/json/)
+
+      record = JSON.parse response.body
+
+      # e.g. {"33433063664720":"Success"}
+
+      expect(record).to be_a(Hash)
+      expect(record[barcode]).to eq('Success')
+
+      # Confirm item is gone:
+      expect { item_by_barcode(barcode) }.to raise_error("Could not find item by barcode: #{barcode}")
+
+      # Fetch sibling item:
+      sibling = item_by_barcode('33433063513190')
+
+      expect(sibling).to be_a(Hash)
+      expect(sibling['barcode']).to eq('33433063513190')
+    end
+  end
 end

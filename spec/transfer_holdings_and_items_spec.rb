@@ -274,28 +274,44 @@ describe 'TransferHoldingsAndItems' do
 
   it "54. Verify that if the user trying to transfer valid owning institution holding id details to existing bib id's,if that bib contains same owning institution holding id, then the application should display the appropriate error message.", number:54 do
     path = '/sharedCollection/transferHoldingsAndItems'
-    # Attempt to transfer item 33333023748987's holding to the same bib..
-    #       "owningInstitutionBibId": ".b171339083",
-    #       "owningInstitutionHoldingsId": "9f8b5f99-0284-4c75-b637-b2d443839635",
-    #       "owningInstitutionItemId": ".i224361302",
+    # Attempt to transfer item 33433020333989 (and new holding id) into bib
+    # b106067813, which currently has just item 33433004537811 under holding
+    # 1fd04df8-995b-4d3d-a6c3-e917ef657389 . We expect this to fail because
+    # we're assigning a holding id for the transferred record that already
+    # exists under the destination bib
     body = {
-      institution: "NYPL",
-      itemTransfers: [
+      "institution":"NYPL","itemTransfers": [
         {
-          destination: {
-            owningInstitutionBibId: ".b106188483",
-            owningInstitutionHoldingsId: "b7982081-fe21-4b3d-a2b0-f9b7dd92fd5a",
-            owningInstitutionItemId: ".i101510251"
+          "destination": {
+            "owningInstitutionBibId":".b106067813",
+            "owningInstitutionHoldingsId":"1fd04df8-995b-4d3d-a6c3-e917ef657389",
+            "owningInstitutionItemId":".i101966908"
           },
-          source: {
-            owningInstitutionBibId: ".b106749511",
-            owningInstitutionHoldingsId: "74cde0f1-3133-4034-8e3d-83c05df9692f",
-            owningInstitutionItemId: ".i101510251"
+          "source":{
+            "owningInstitutionBibId":".b109358983",
+            "owningInstitutionHoldingsId":"1506b70a-4f6a-4dd1-8b1b-55754d7f61c5",
+            "owningInstitutionItemId":".i101966908"
           }
         }
       ]
     }
 
+    body = {
+      "institution":"NYPL","itemTransfers": [
+        {
+          "destination": {
+            "owningInstitutionBibId":".b109358983",
+            "owningInstitutionHoldingsId":"1506b70a-4f6a-4dd1-8b1b-55754d7f61c5",
+            "owningInstitutionItemId":".i101966908"
+          },
+          "source":{
+            "owningInstitutionBibId":".b106067813",
+            "owningInstitutionHoldingsId":"1fd04df8-995b-4d3d-a6c3-e917ef657389",
+            "owningInstitutionItemId":".i101966908"
+          }
+        }
+      ]
+    }
     response = post path, body
 
     expect(response.code.to_i).to eq(200)

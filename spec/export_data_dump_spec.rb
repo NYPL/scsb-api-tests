@@ -4,7 +4,7 @@ describe 'Export data dump' do
 
   before(:all) do
     # Update a single CUL item to ensure we have something to export:
-    update_item 'CUL', 'cul.CU54865638.marcxml'
+    # update_item 'CUL', 'cul.CU54865638.marcxml'
   end
 
   it '1. Verify that Recap User can export PUL incremental data in Marc format', number:1 do

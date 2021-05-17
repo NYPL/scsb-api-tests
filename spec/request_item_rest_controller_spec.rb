@@ -11,7 +11,7 @@ describe 'Request Item Rest Controller' do
         pickupLocation: "NH",
         patronIdentifier: '23333090799527',
         itemBarcodes: [
-          '33433034659452'
+          '33433074450028'
         ],
         itemOwningInstitution: "NYPL"
       }
@@ -19,6 +19,10 @@ describe 'Request Item Rest Controller' do
 
     it '19. Verify that Recap User can create a hold', number:19 do
       path = '/requestItem/holdItem'
+
+      barcode = body[:itemBarcodes].first
+      item = item_by_barcode barcode
+      raise "Problem with chosen test item (#{barcode}): It's not not available" if item['availability'] != 'Available'
 
       response = post path, body
 
@@ -30,13 +34,15 @@ describe 'Request Item Rest Controller' do
       puts "TODO: Verify hold placed for patron in Test Sierra"
 
       expect(record).to be_a(Hash)
-      expect(record['itemBarcode']).to eq('33433034659452')
+      expect(record['itemBarcode']).to eq(barcode)
       expect(record['success']).to eq(true)
       expect(record['screenMessage']).to match(/^Job finished successfully for hold request. \(RequestID: \d+\)$/)
     end
 
     it '14. Verify that Recap User can cancel a hold', number:14 do
       path = '/requestItem/cancelHoldItem'
+
+      barcode = body[:itemBarcodes].first
 
       response = post path, body
 
@@ -48,7 +54,7 @@ describe 'Request Item Rest Controller' do
       puts "TODO: Verify hold removed for patron in Test Sierra"
 
       expect(record).to be_a(Hash)
-      expect(record['itemBarcode']).to eq('33433034659452')
+      expect(record['itemBarcode']).to eq(barcode)
       expect(record['success']).to eq(true)
       expect(record['screenMessage']).to match(/^Job finished successfully for hold request. \(CancelID: \d+\)$/)
     end
@@ -94,7 +100,10 @@ describe 'Request Item Rest Controller' do
 
     it '15. Verify that Recap user can Cancel the request through API service', number:15 do
       puts "TODO: This is brittle because we're hard-coding a requestId that has already been canceled"
-      path = '/requestItem/cancelRequest?requestId=707890'
+      # This request id can be found by searching for the request in UAT UI (Request > Search Requests)
+      # and then geting the @value of the input in table#request-result-table > tbody > tr > input
+      # for the relevant item
+      path = '/requestItem/cancelRequest?requestId=755004'
 
       response = post path
 
@@ -105,12 +114,12 @@ describe 'Request Item Rest Controller' do
 
       expect(record).to be_a(Hash)
       expect(record['success']).to eq(true)
-      expect(record['screenMessage']).to eq('Request cancellation succcessfully processed')
+      expect(record['screenMessage']).to eq('Request cancellation successfully processed')
     end
   end
 
   describe 'itemInformation' do
-    it '16. Verify that Recap user can view the item information as part of the request API workflow.', number:16 do
+    it '16. Verify that Recap user can view the item information as part of the request API workflow.', number:20 do
       path = '/requestItem/itemInformation'
       body = {
         itemBarcodes: [
@@ -160,8 +169,7 @@ describe 'Request Item Rest Controller' do
       body = {
         itemBarcodes: [
           '33433116343660'
-        ],
-        requestIds: [707890]
+        ]
       }
 
       response = post path, body

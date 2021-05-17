@@ -6,9 +6,9 @@ require 'json'
 
 require_relative '../logger'
 
-def item_by_barcode (barcode)
+def item_by_barcode (barcode, deleted: false)
   result = post '/searchService/search', {
-    "deleted": false,
+    "deleted": deleted,
     "fieldValue": barcode,
     "fieldName": "Barcode",
     "owningInstitutions": [
@@ -23,16 +23,71 @@ def item_by_barcode (barcode)
   body['searchResultRows'].first
 end
 
+# Fetch all bnums associated with barcode (i.e. bound-with)
+def bnums_by_barcode (barcode, deleted: false)
+  result = post '/searchService/search', {
+    "deleted": deleted,
+    "fieldValue": barcode,
+    "fieldName": "Barcode",
+    "owningInstitutions": [
+      "NYPL"
+    ]
+  }
+
+  body = JSON.parse result.body
+
+  raise "Could not find item by barcode: #{barcode}" if body.nil? || body['searchResultRows'].nil? || body['searchResultRows'].size < 1
+
+  body['searchResultRows'].map { |res| res['owningInstitutionBibId'] }
+end
+
+# Fetch all bnums associated with barcode (i.e. bound-with)
+def holdings_ids_by_barcode (barcode, deleted: false)
+  result = post '/searchService/search', {
+    "deleted": deleted,
+    "fieldValue": barcode,
+    "fieldName": "Barcode",
+    "owningInstitutions": [
+      "NYPL"
+    ]
+  }
+
+  body = JSON.parse result.body
+
+  raise "Could not find item by barcode: #{barcode}" if body.nil? || body['searchResultRows'].nil? || body['searchResultRows'].size < 1
+
+  body['searchResultRows'].map { |res| res['owningInstitutionHoldingsId'] }
+end
+
 def update_item (institution, which)
   data = File.open("./spec/data/#{which}").read
   path = "/sharedCollection/submitCollection?institution=#{institution}&isCGDProtected=false"
   response = post path, data
-  puts "post #{data}"
 
   Logger.debug "POSTed the following to #{path}:\n\n#{data}\n\nResulting in http status #{response.code} response with body:\n\n#{response.body}"
   puts 'response:'
   p response
 end
+
+def items_by_bnum (bnum, institution: 'NYPL')
+  result = post '/searchService/search', {
+    "deleted": false,
+    "fieldValue": bnum,
+    "fieldName": "OwningInstitutionBibId",
+    "owningInstitutions": [
+      institution
+    ]
+  }
+
+  body = JSON.parse result.body
+
+  raise "Could not find items by bnum: #{bnum}" if body.nil? || body['searchResultRows'].nil? || body['searchResultRows'].size < 1
+
+  items = body['searchResultRows']
+  items = items.first['searchItemResultRows'] unless items.first['searchItemResultRows'].empty?
+  items
+end
+
 
 def post (path, body = nil , options = {})
   Logger.debug "POSTing the following to #{path}:\n\n#{body.nil? ? '""' : body.to_json}"
@@ -56,7 +111,7 @@ def post (path, body = nil , options = {})
     http.request(request)
   end
 
-  Logger.debug "POSTed the following to #{path}:\n\n#{body.to_json}\n\nResulting in http status #{response.code} (Content-Type #{response['Content-Type']}) response with body:\n\n#{response.body}"
+  Logger.debug "POSTed the following to #{path}:\n#{body.to_json}\n\nResulting in http status #{response.code} (Content-Type #{response['Content-Type']}) response with body:\n#{response.body}\n"
 
   response
 end
@@ -64,7 +119,7 @@ end
 def get (path, options = {})
   # options = parse_http_options options
 
-  Logger.debug "Fetching path: #{path}"
+  # Logger.debug "Fetching path: #{path}"
 
   uri = URI.parse("#{ENV['BASE_URL']}#{path}")
 
@@ -74,7 +129,7 @@ def get (path, options = {})
     http.request(request)
   end
 
-  Logger.debug "Fetched the following path: #{path}\n\nResulting in http status #{response.code} response with body:\n\n#{response.body}"
+  Logger.debug "Fetched the following path: #{path}\n\nResulting in http status #{response.code} response with body:\n#{response.body}\n"
 
   response
 end

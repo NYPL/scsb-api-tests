@@ -1,12 +1,12 @@
 require_relative './spec_helper'
 
 describe 'SubmitCollections' do
-  it '43. Verify that SCSB user can modify the item details through submit collection api service.', number:43 do
-    barcode = '33433116343660'
+  it '5. Verify that SCSB user can modify the item details through submit collection api service.', number:5 do
+    barcode = '33433034009526'
 
     path = '/sharedCollection/submitCollection?institution=NYPL&isCGDProtected=false'
 
-    # Following was generated in QA via recap/nypl-bibs?barcode=33433116343660&customerCode=NA
+    # Following was generated in QA via recap/nypl-bibs?barcode=33433034009526&customerCode=NA
     doc = parse_xml File.open("./spec/data/nypl-#{barcode}.scsbxml").read
     title_node = doc.at_xpath('//datafield[@tag="245"]/subfield[@code="a"]')
     # Edit title:
@@ -23,12 +23,12 @@ describe 'SubmitCollections' do
 
     record = JSON.parse response.body
 
-    # e.g. [{"itemBarcode"=>"33433116343660", "message"=>"Success record"}]
+    # e.g. [{"itemBarcode"=>"33433034009526", "message"=>"Success record"}]
 
     expect(record).to be_a(Array)
     expect(record.size).to eq(1)
     expect(record.first).to be_a(Hash)
-    expect(record.first['itemBarcode']).to eq('33433116343660')
+    expect(record.first['itemBarcode']).to eq(barcode)
     expect(record.first['message']).to eq('Success record')
 
     Logger.debug "# Verifying title updated"
@@ -48,13 +48,13 @@ describe 'SubmitCollections' do
     expect(item['title']).to eq("#{original_title} #{author}")
   end
 
-  it '44. Verify that SCSB user can modify the item details through submit collection api service.', number:44 do
+  it '6. Verify that when barcode is invalid the exception is returned.', number:6 do
     path = '/sharedCollection/submitCollection?institution=NYPL&isCGDProtected=false'
-    # Following was generated in QA via recap/nypl-bibs?barcode=33433116343660&customerCode=NA
-    body = File.open('./spec/data/nypl-33433116343660.scsbxml').read
+    # Following was generated in QA via recap/nypl-bibs?barcode=33433034009526&customerCode=NA
+    body = File.open('./spec/data/nypl-33433034009526.scsbxml').read
 
     # Change barcode to something invalid:
-    body = body.gsub '33433116343660', '3343311634366099999'
+    body = body.gsub '33433034009526', '3343303400952699999'
 
     response = post path, body
 
@@ -64,12 +64,12 @@ describe 'SubmitCollections' do
 
     record = JSON.parse response.body
 
-    # e.g. [{"itemBarcode":"3343311634366099999","message":"Exception record - Item is unavailable in scsb to update"}]
+    # e.g. [{"itemBarcode":"3343303400952699999","message":"Exception record - Item is unavailable in scsb to update"}]
 
     expect(record).to be_a(Array)
     expect(record.size).to eq(1)
     expect(record.first).to be_a(Hash)
-    expect(record.first['itemBarcode']).to eq('3343311634366099999')
+    expect(record.first['itemBarcode']).to eq('3343303400952699999')
     expect(record.first['message']).to eq('Exception record - Item is unavailable in scsb to update')
   end
 end

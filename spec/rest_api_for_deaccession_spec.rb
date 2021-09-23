@@ -1,6 +1,41 @@
 require_relative './spec_helper'
 
 describe 'deaccession' do
+  it '7. Verify that if multiple items are included in single call, all bibs and holdings are deleted.', number:7 do
+    records = [
+      {
+        deliveryLocation: 'NP',
+        itemBarcode: '33433088232933'
+      },
+      {
+        deliveryLocation: 'NP',
+        itemBarcode: '33433064251923'
+      }
+    ]
+
+    # Deaccession two items:
+    response = post '/sharedCollection/deaccession', {
+      deAccessionItems: records,
+      username: 'paulbeaudoin@nypl.org'
+    }
+
+    expect(response.code.to_i).to eq(200)
+    expect(response['Content-Type']).to match(/^application\/json/)
+
+    result = JSON.parse response.body
+
+    p result
+
+    # e.g. {"33433088232933":"Success","33433064251923":"Success"}
+
+    records.map { |r| r[:itemBarcode] }.each do |barcode|
+      expect(result[barcode]).to eq('Success')
+
+      # Confirm item is gone:
+      expect { item_by_barcode(barcode) }.to raise_error("Could not find item by barcode: #{barcode}")
+    end
+  end
+
   it '39. Verify that if user provides a barcode that already has been deaccessioned then application should display an error message.', number:39 do
     path = '/sharedCollection/deaccession'
 

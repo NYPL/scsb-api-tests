@@ -17,7 +17,7 @@ describe 'Request Item Rest Controller' do
       }
     end
 
-    it '19. Verify that Recap User can create a hold', number:19 do
+    it '19. Verify that Recap User can create a hold', deprecated:true do
       path = '/requestItem/holdItem'
 
       barcode = body[:itemBarcodes].first
@@ -39,7 +39,7 @@ describe 'Request Item Rest Controller' do
       expect(record['screenMessage']).to match(/^Job finished successfully for hold request. \(RequestID: \d+\)$/)
     end
 
-    it '14. Verify that Recap User can cancel a hold', number:14 do
+    it '14. Verify that Recap User can cancel a hold', deprecated:true do
       path = '/requestItem/cancelHoldItem'
 
       barcode = body[:itemBarcodes].first
@@ -78,7 +78,7 @@ describe 'Request Item Rest Controller' do
       }
     end
 
-    it '24. Verify that Recap user can request the item through API workflow.', number:24 do
+    it '1. Verify that Recap user can request the item through API workflow.', number:1 do
       path = '/requestItem/requestItem'
 
       response = post path, body
@@ -88,17 +88,17 @@ describe 'Request Item Rest Controller' do
 
       record = JSON.parse response.body
 
-      puts "TODO: Verify hold placed for patron in Test Sierra"
+      puts "TODO: Verify hold placed for patron 5427701 on item 16265438 in Test Sierra"
 
       expect(record).to be_a(Hash)
       expect(record['itemBarcodes']).to be_a(Array)
-      expect(record['itemBarcodes'].first).to eq('33433116343660')
+      expect(record['itemBarcodes'].first).to eq(body[:itemBarcodes].first)
       expect(record['success']).to eq(true)
       expect(record['screenMessage']).to eq('Message received, your request will be processed')
 
     end
 
-    it '15. Verify that Recap user can Cancel the request through API service', number:15 do
+    it '15. Verify that Recap user can Cancel the request through API service', deprecated:true do
       puts "TODO: This is brittle because we're hard-coding a requestId that has already been canceled"
       # This request id can be found by searching for the request in UAT UI (Request > Search Requests)
       # and then geting the @value of the input in table#request-result-table > tbody > tr > input
@@ -119,7 +119,7 @@ describe 'Request Item Rest Controller' do
   end
 
   describe 'itemInformation' do
-    it '16. Verify that Recap user can view the item information as part of the request API workflow.', number:20 do
+    it '16. Verify that Recap user can view the item information as part of the request API workflow.', deprecated:true do
       path = '/requestItem/itemInformation'
       body = {
         itemBarcodes: [
@@ -145,7 +145,7 @@ describe 'Request Item Rest Controller' do
   end
 
   describe 'patronInformation' do
-    it '21. Verify that Recap user can obtain Patron information through API workflow.', number:21 do
+    it '21. Verify that Recap user can obtain Patron information through API workflow.', deprecated:true do
       path = '/requestItem/patronInformation'
       body = {
         patronIdentifier: '23333090799527',
@@ -164,7 +164,7 @@ describe 'Request Item Rest Controller' do
   end
 
   describe 'refile' do
-    it '23. Verify that Recap user can Refile the request item through API workflow.', number:23 do
+    it '23. Verify that Recap user can Refile the request item through API workflow.', deprecated:true do
       path = '/requestItem/refile'
       body = {
         itemBarcodes: [

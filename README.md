@@ -4,7 +4,8 @@ UAT is the "test" deployment of SCSB. This repo contains a set of tests that can
 
 Tests are assigned numbers from these NYPL test sheets, which include criteria and some sample data:
  - [Sep/Oct 2020 NYPL Test sheet](https://docs.google.com/spreadsheets/d/1xTRg69K1gR5S66y3UXOf_ASA-yjQgNPO/edit?ts=5f57dfa2#gid=1447839939)
- - [March 2021 NYPL Test sheet](https://docs.google.com/spreadsheets/d/1KnMgycTN5Vyx-PeFcDyLp5rcqvuN3m8e/edit#gid=822006474)
+ - [March 2021 NYPL Test sheet (Phase IV, Stage 2)](https://docs.google.com/spreadsheets/d/1KnMgycTN5Vyx-PeFcDyLp5rcqvuN3m8e/edit#gid=822006474)
+ - [June 2021 NYPL Test sheet (Phase IV, Stage 3)](https://docs.google.com/spreadsheets/d/19AQjgU6IFLHPISI7D2f84ppRsfCAIgtFb7pFiISoaDo/edit#gid=747913097)
 
 ## Setup
 

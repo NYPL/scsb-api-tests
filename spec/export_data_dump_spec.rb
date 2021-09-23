@@ -7,7 +7,7 @@ describe 'Export data dump' do
     # update_item 'CUL', 'cul.CU54865638.marcxml'
   end
 
-  it '1. Verify that Recap User can export PUL incremental data in Marc format', number:1 do
+  it '1. Verify that Recap User can export PUL incremental data in Marc format', deprecated:true do
 
     response = get '/dataDump/exportDataDump?' + query_string({
       collectionGroupIds: '1,2',
@@ -40,7 +40,7 @@ describe 'Export data dump' do
     end
   end
 
-  it '2. Verify that Recap User can export CUL incremental data in Marc format', number:2 do
+  it '2. Verify that Recap User can export CUL incremental data in Marc format', deprecated:true do
     response = get '/dataDump/exportDataDump?' + query_string({
       collectionGroupIds: '1,2',
       date: (Time.new - 60*60*24*3).strftime('%Y-%m-%d %H:%M'),
@@ -62,7 +62,7 @@ describe 'Export data dump' do
     expect(records.size).to be > 0
   end
 
-  it '3. Verify that Recap User can export NYPL incremental data in Marc format', number:3 do
+  it '3. Verify that Recap User can export NYPL incremental data in Marc format', deprecated:true do
     response = get '/dataDump/exportDataDump?' + query_string({
       collectionGroupIds: '1,2',
       date: (Time.new - 60*60*24*3).strftime('%Y-%m-%d %H:%M'),
@@ -84,7 +84,7 @@ describe 'Export data dump' do
     expect(records.size).to be > 0
   end
 
-  it '4. Verify that Recap User can export PUL incremental data in SCSB format', number:4 do
+  it '4. Verify that Recap User can export PUL incremental data in SCSB format', deprecated:true do
     path = '/dataDump/exportDataDump?' + query_string({
       collectionGroupIds: '1,2',
       date: (Time.new - 60*60*24*3).strftime('%Y-%m-%d %H:%M'),
@@ -107,7 +107,7 @@ describe 'Export data dump' do
     expect(records.size).to be > 0
   end
 
-  it '5. Verify that Recap User can export CUL incremental data in SCSB format', number:5 do
+  it '5. Verify that Recap User can export CUL incremental data in SCSB format', deprecated:true do
     response = get '/dataDump/exportDataDump?' + query_string({
       collectionGroupIds: '1,2',
       date: (Time.new - 60*60*24*3).strftime('%Y-%m-%d %H:%M'),
@@ -129,7 +129,7 @@ describe 'Export data dump' do
     expect(records.size).to be > 0
   end
 
-  it '6. Verify that Recap User can export NYPL incremental data in SCSB format', number:6 do
+  it '6. Verify that Recap User can export NYPL incremental data in SCSB format', deprecated:true do
     response = get '/dataDump/exportDataDump?' + query_string({
       collectionGroupIds: 1,
       date: (Time.new - 60*60*24*3).strftime('%Y-%m-%d %H:%M'),
@@ -151,7 +151,7 @@ describe 'Export data dump' do
     expect(records.size).to be > 0
   end
 
-  it '7. Verify that Recap User can export NYPL deleted data in SCSB format', number:7 do
+  it '7. Verify that Recap User can export NYPL deleted data in SCSB format', deprecated:true do
     response = get '/dataDump/exportDataDump?' + query_string({
       date: (Time.new - 60*60*24*3).strftime('%Y-%m-%d %H:%M'),
       emailToAddress: nil,
@@ -172,7 +172,7 @@ describe 'Export data dump' do
     expect(records.size).to be > 0
   end
 
-  it '8. Verify that Recap User can export CUL deleted data in JSON format', number:8 do
+  it '8. Verify that Recap User can export CUL deleted data in JSON format', deprecated:true do
     response = get '/dataDump/exportDataDump?' + query_string({
       date: (Time.new - 60*60*24*3).strftime('%Y-%m-%d %H:%M'),
       emailToAddress: nil,
@@ -193,7 +193,7 @@ describe 'Export data dump' do
     expect(records.size).to be > 0
   end
 
-  it '9. Verify that Recap User can export PUL deleted data in JSON format', number:9 do
+  it '9. Verify that Recap User can export PUL deleted data in JSON format', deprecated:true do
     response = get '/dataDump/exportDataDump?' + query_string({
       date: (Time.new - 60*60*24*3).strftime('%Y-%m-%d %H:%M'),
       emailToAddress: nil,
@@ -229,7 +229,7 @@ describe 'Export data dump' do
       }
     end
 
-    it '10. Verify that Recap User can export PUL data with datadump to date.', number:10 do
+    it '10. Verify that Recap User can export PUL data with datadump to date.', deprecated:true do
       response = get '/dataDump/exportDataDump?' + query_string({
         institutionCodes: 'PUL',
         toDate: (Time.new).strftime('%Y-%m-%d %H:%M'),
@@ -245,7 +245,7 @@ describe 'Export data dump' do
       expect(records.size).to be > 0
     end
 
-    it '11. Verify that Recap User can export CUL data with datadump to date.', number:11 do
+    it '11. Verify that Recap User can export CUL data with datadump to date.', deprecated:true do
       response = get '/dataDump/exportDataDump?' + query_string({
         institutionCodes: 'CUL',
         toDate: (Time.new).strftime('%Y-%m-%d %H:%M'),
@@ -261,7 +261,7 @@ describe 'Export data dump' do
       expect(records.size).to be > 0
     end
 
-    it '12. Verify that Recap User can export NYPL data with datadump to date.', number:12 do
+    it '12. Verify that Recap User can export NYPL data with datadump to date.', deprecated:true do
       response = get '/dataDump/exportDataDump?' + query_string({
         institutionCodes: 'NYL',
         toDate: (Time.new).strftime('%Y-%m-%d %H:%M'),

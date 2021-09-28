@@ -16,7 +16,7 @@ describe 'deaccession' do
     # Deaccession two items:
     response = post '/sharedCollection/deaccession', {
       deAccessionItems: records,
-      username: 'paulbeaudoin@nypl.org'
+      username: ENV['API_USERNAME']
     }
 
     expect(response.code.to_i).to eq(200)
@@ -36,7 +36,7 @@ describe 'deaccession' do
     end
   end
 
-  it '39. Verify that if user provides a barcode that already has been deaccessioned then application should display an error message.', number:39 do
+  it '39. Verify that if user provides a barcode that already has been deaccessioned then application should display an error message.', deprecated:true do
     path = '/sharedCollection/deaccession'
 
     barcode = '33433128993643'
@@ -62,32 +62,52 @@ describe 'deaccession' do
     expect(record[barcode]).to eq('Failure - The requested item has already been deaccessioned.')
   end
 
-  it '42. Verify that if user provides invalid parameter(other than Barcode) through Deaccession api service, application should display the failure error message', number:42 do
-    path = '/sharedCollection/deaccession'
+  describe 'Test 10' do
     barcode = '33433120661248'
 
-    Logger.debug "# Attempting to deaccession #{barcode}, which is invalid (because it has already been deaccessioned)"
+    before(:each) do
+      # Ensure item is already deaccessioned
+      body = {
+        deAccessionItems: [
+          {
+            deliveryLocation: 'NA',
+            itemBarcode: barcode
+          }
+        ],
+        username: ENV['API_USERNAME']
+      }
 
-    body = {
-      deAccessionItems: [
-        {
-          deliveryLocation: 'NA',
-          itemBarcode: barcode
-        }
-      ]
-    }
+      resp = post '/sharedCollection/deaccession', body
+      p resp
+    end
 
-    response = post path, body
+    it '10. Verify that if user provides invalid parameter (other than the barcode) through the deaccession api service, application should display the failure error message.', number:10 do
+      path = '/sharedCollection/deaccession'
 
-    expect(response.code.to_i).to eq(200)
-    expect(response['Content-Type']).to match(/^application\/json/)
+      Logger.debug "# Attempting to deaccession #{barcode}, which is invalid (because it has already been deaccessioned)"
 
-    record = JSON.parse response.body
+      body = {
+        deAccessionItems: [
+          {
+            deliveryLocation: 'NA',
+            itemBarcode: barcode
+          }
+        ],
+        username: ENV['API_USERNAME']
+      }
 
-    # e.g. {"33433120661248":"Failure - The requested item has already been deaccessioned."}
+      response = post path, body
 
-    expect(record).to be_a(Hash)
-    expect(record[barcode]).to eq('Failure - The requested item has already been deaccessioned.')
+      expect(response.code.to_i).to eq(200)
+      expect(response['Content-Type']).to match(/^application\/json/)
+
+      record = JSON.parse response.body
+
+      # e.g. {"33433120661248":"Failure - The requested item has already been deaccessioned."}
+
+      expect(record).to be_a(Hash)
+      expect(record[barcode]).to eq('Failure - The requested item has already been deaccessioned.')
+    end
   end
 
   describe 'Test 36' do
@@ -104,7 +124,7 @@ describe 'deaccession' do
       ]
     end
 
-    it '36. Verify that if user trying to deaccession a single Item record which has multiple item and Holdings attached to it (bound-with) then application should update delete flag for corresponding item and the bib and holding records.', number:36 do
+    it '36. Verify that if user trying to deaccession a single Item record which has multiple item and Holdings attached to it (bound-with) then application should update delete flag for corresponding item and the bib and holding records.', deprecated:true do
 
       # Deaccession a single item from a multi-item bib:
       response = post '/sharedCollection/deaccession', {
@@ -137,7 +157,7 @@ describe 'deaccession' do
     end
   end
 
-  it '37. Application should perform deaccession  for an item but the bib has attached with multiple items. Then, the item should be flagged has deletion and not for bib and holdings.', number:37 do
+  it '37. Application should perform deaccession  for an item but the bib has attached with multiple items. Then, the item should be flagged has deletion and not for bib and holdings.', deprecated:true do
 
     bnum = '.b131115674'
     items = items_by_bnum bnum
@@ -160,7 +180,7 @@ describe 'deaccession' do
 
   end
 
-  it '34. Verify that if user trying to deaccession an item record which has multiple holding and Bibs and application should update delete flag for all holding and bib records.', number:34 do
+  it '9. BOUND WITH: Verify that if user tries to deaccession a single Item record which has multiple item and holdings attached to it, then the application should update delete flag for corresponding item and the bib and holding records.', number:9 do
 
     # Sample barcodes:
     #   33433011646076
@@ -179,11 +199,13 @@ describe 'deaccession' do
     bnums = bnums_by_barcode barcode
     expect(bnums).to be_a(Array)
     expect(bnums.size).to be >= 2
+    Logger.debug "#   item has #{bnums.size} bibs"
 
     Logger.debug "# Verifying the item has multiple holdings ids"
     holdings_ids = holdings_ids_by_barcode barcode
     expect(holdings_ids).to be_a(Array)
     expect(holdings_ids.size).to be >= 2
+    Logger.debug "#   item has #{holdings_ids.size} holdings"
 
     Logger.debug "# Deaccessioning #{barcode}"
 
@@ -193,7 +215,8 @@ describe 'deaccession' do
           deliveryLocation: 'NA',
           itemBarcode: barcode
         }
-      ]
+      ],
+      username: ENV['API_USERNAME']
     }
 
     path = '/sharedCollection/deaccession'
@@ -214,7 +237,7 @@ describe 'deaccession' do
     expect { item_by_barcode(barcode) }.to raise_error("Could not find item by barcode: #{barcode}")
   end
 
-  it '35. Verify that if user trying to deaccession an item record which has single holding and multiple bibs then application should update delete flag for item, Holding and Bib records', number:35 do
+  it '8. BOUND WITH: Verify that if user tries to deaccession an item record which has single holding and multiple bibs, then the application should update delete flag for item, holding and bib records.', number:8 do
 
     barcode = '33433109761407'
 

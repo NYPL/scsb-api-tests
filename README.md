@@ -7,7 +7,7 @@ Tests are assigned numbers from these NYPL test sheets, which include criteria a
  - [March 2021 NYPL Test sheet (Phase IV, Stage 2)](https://docs.google.com/spreadsheets/d/1KnMgycTN5Vyx-PeFcDyLp5rcqvuN3m8e/edit#gid=822006474)
  - [June 2021 NYPL Test sheet (Phase IV, Stage 3)](https://docs.google.com/spreadsheets/d/19AQjgU6IFLHPISI7D2f84ppRsfCAIgtFb7pFiISoaDo/edit#gid=747913097)
  - [Sep 2021 NYPL Test sheet (Phase IV, Stage 4)](https://docs.google.com/spreadsheets/d/1bcoPxLDbj6ZnkqOaLmMCAjl1zBrczIzktkdcLfaFyEE/edit#gid=715491896)
-
+- [Nov 2021 NYPL Test sheet (Phase IV, Stage 3 Part 2)](https://docs.google.com/spreadsheets/d/1rczCw7KepBDqSXOAbQDrXyIyE58SEF7u_xrXGCsP24U/edit#gid=715491896)
 ## Setup
 
 ```

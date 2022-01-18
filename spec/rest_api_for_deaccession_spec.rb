@@ -1,7 +1,7 @@
 require_relative './spec_helper'
 
 describe 'deaccession' do
-  it '7. Verify that if multiple items are included in single call, all bibs and holdings are deleted.', number:7 do
+  it '8. Verify that if multiple items are included in single call, all bibs and holdings are deleted.', number:8 do
     records = [
       {
         deliveryLocation: 'NP',
@@ -81,7 +81,7 @@ describe 'deaccession' do
       p resp
     end
 
-    it '10. Verify that if user provides invalid parameter (other than the barcode) through the deaccession api service, application should display the failure error message.', number:10 do
+    it '11. Verify that if user provides invalid parameter (other than the barcode) through the deaccession api service, application should display the failure error message.', number:11 do
       path = '/sharedCollection/deaccession'
 
       Logger.debug "# Attempting to deaccession #{barcode}, which is invalid (because it has already been deaccessioned)"
@@ -180,7 +180,7 @@ describe 'deaccession' do
 
   end
 
-  it '9. BOUND WITH: Verify that if user tries to deaccession a single Item record which has multiple item and holdings attached to it, then the application should update delete flag for corresponding item and the bib and holding records.', number:9 do
+  it '10. BOUND WITH: Verify that if user tries to deaccession a single Item record which has multiple item and holdings attached to it, then the application should update delete flag for corresponding item and the bib and holding records.', number:10 do
 
     # Sample barcodes:
     #   33433011646076

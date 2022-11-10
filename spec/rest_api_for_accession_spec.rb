@@ -1,7 +1,7 @@
 require_relative './spec_helper'
 
 describe 'accession' do
-  it '26. Verify that user can enable deaccession[ed] item record through accession api service.', number:26 do
+  it '26. Verify that user can enable deaccession[ed] item record through accession api service.', deprecated:true do
     barcode = '33433086962713'
     customer_code = 'NA'
 
@@ -55,7 +55,7 @@ describe 'accession' do
     expect(item['barcode']).to eq(barcode)
   end
 
-  it '27. Verify that if user provides a barcode/customer code that is a duplicate of an item already in the system,  then application should display an appropriate error message.', number:27 do
+  it '27. Verify that if user provides a barcode/customer code that is a duplicate of an item already in the system,  then application should display an appropriate error message.', deprecated:true do
     path = '/sharedCollection/accession'
     body = {
       accessionRequests: [

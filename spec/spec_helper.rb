@@ -6,14 +6,27 @@ require 'json'
 
 require_relative '../logger'
 
-def item_by_barcode (barcode, deleted: false)
+# Get item status for barcode
+def item_status (barcode)
+  path = '/sharedCollection/itemAvailabilityStatus'
+
+  body = {
+    "barcodes": [barcode]
+  }
+
+  response = post path, body
+
+  response = JSON.parse response.body
+
+  response.first["itemAvailabilityStatus"]
+end
+
+def item_by_barcode (barcode, deleted: false, institutions: ['NYPL'])
   result = post '/searchService/search', {
     "deleted": deleted,
     "fieldValue": barcode,
     "fieldName": "Barcode",
-    "owningInstitutions": [
-      "NYPL"
-    ]
+    "owningInstitutions": institutions
   }
 
   body = JSON.parse result.body

@@ -91,7 +91,7 @@ describe 'deaccession' do
       p resp
     end
 
-    it '11. Verify that if user provides invalid parameter (other than the barcode) through the deaccession api service, application should display the failure error message.', number:11 do
+    it '11. Verify that if user provides invalid parameter (other than the barcode) through the deaccession api service, application should display the failure error message.', deprecated:true do
       path = '/sharedCollection/deaccession'
 
       # Barcode defined above
@@ -191,7 +191,7 @@ describe 'deaccession' do
 
   end
 
-  it '10. BOUND WITH: Verify that if user tries to deaccession a single Item record which has multiple item and holdings attached to it, then the application should update delete flag for corresponding item and the bib and holding records.', number:10 do
+  it '10. BOUND WITH: Verify that if user tries to deaccession a single Item record which has multiple item and holdings attached to it, then the application should update delete flag for corresponding item and the bib and holding records.', deprecated:true do
 
     # Sample barcodes:
     #   33433011646076

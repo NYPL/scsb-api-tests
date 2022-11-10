@@ -81,6 +81,13 @@ describe 'Request Item Rest Controller' do
     it '1. Verify that Recap user can request the item through API workflow.', number:1 do
       path = '/requestItem/requestItem'
 
+      barcode = body[:itemBarcodes].first
+
+      Logger.debug "Verifying #{barcode} is available"
+      status = item_status(body[:itemBarcodes].first)
+      expect(status).to eq('Available')
+
+      Logger.debug "Posting requestItem for item #{body[:itemBarcodes].first}"
       response = post path, body
 
       expect(response.code.to_i).to eq(200)
@@ -88,14 +95,15 @@ describe 'Request Item Rest Controller' do
 
       record = JSON.parse response.body
 
-      puts "TODO: Verify hold placed for patron 5427701 on item 16265438 in Test Sierra"
-
       expect(record).to be_a(Hash)
       expect(record['itemBarcodes']).to be_a(Array)
       expect(record['itemBarcodes'].first).to eq(body[:itemBarcodes].first)
       expect(record['success']).to eq(true)
       expect(record['screenMessage']).to eq('Message received, your request will be processed')
 
+      Logger.debug "Verifying #{barcode} is no longer available"
+      status = item_status(body[:itemBarcodes].first)
+      expect(status).to eq('Not Available')
     end
 
     it '15. Verify that Recap user can Cancel the request through API service', deprecated:true do

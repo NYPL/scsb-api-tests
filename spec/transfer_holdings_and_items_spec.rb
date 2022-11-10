@@ -29,7 +29,7 @@ describe 'TransferHoldingsAndItems' do
     # reset_parents_for_33433021082692
   end
 
-  it "45. Verify that user can transfer the existing owning institution item id details from existing holding to another existing holding id's, only for the same institution.", number:45 do
+  it "45. Verify that user can transfer the existing owning institution item id details from existing holding to another existing holding id's, only for the same institution.", deprecated:true do
 
     path = '/sharedCollection/transferHoldingsAndItems'
     # Attempt to transfer item 33433066644109...
@@ -130,7 +130,7 @@ describe 'TransferHoldingsAndItems' do
     expect(item['owningInstitutionBibId']).to eq(body[:itemTransfers].first[:source][:owningInstitutionBibId])
   end
 
-  it "46. Verify that user can't transfer the item or Holding id information for cross-institution BIB ids.", number:46 do
+  it "46. Verify that user can't transfer the item or Holding id information for cross-institution BIB ids.", deprecated:true do
     path = '/sharedCollection/transferHoldingsAndItems'
 
     # These may need to be changed to a barcode that can be transferred and a
@@ -176,7 +176,7 @@ describe 'TransferHoldingsAndItems' do
     # TODO: This is currently failing to reject the illegal transfer, so unclear what response is expected
   end
 
-  it "47. Verify that user can transfer the existing owning institution item id details from existing bib/holding to another existing bib/ holding id's, only for the same institution.", number:47 do
+  it "47. Verify that user can transfer the existing owning institution item id details from existing bib/holding to another existing bib/ holding id's, only for the same institution.", deprecated:true do
     path = '/sharedCollection/transferHoldingsAndItems'
     # Attempt to transfer item 33333059683314 to the holdings and bib for item 33433112694108
     body = {
@@ -213,7 +213,7 @@ describe 'TransferHoldingsAndItems' do
     expect(record['itemTransferResponses'].first['message']).to eq('Successfully relinked')
   end
 
-  it "50. Verify that user can transfer existing owning institution holding id details from existing bib to another existing bib id's, only for the same institution.", number:50 do
+  it "50. Verify that user can transfer existing owning institution holding id details from existing bib to another existing bib id's, only for the same institution.", deprecated:true do
     path = '/sharedCollection/transferHoldingsAndItems'
 
     # These may need to be changed to a barcode that can be transferred and a
@@ -297,7 +297,7 @@ describe 'TransferHoldingsAndItems' do
 =end
   end
 
-  it "52. Verify that if the user trying to transfer invalid owning institution item id details to existing holding id's, then application should display an appropriate error message.", number:52 do
+  it "52. Verify that if the user trying to transfer invalid owning institution item id details to existing holding id's, then application should display an appropriate error message.", deprecated:true do
     path = '/sharedCollection/transferHoldingsAndItems'
     # Attempt to transfer item 33333023748987 (but intentionally flub the itemid):
     #       "owningInstitutionBibId": ".b171339083",
@@ -341,7 +341,7 @@ describe 'TransferHoldingsAndItems' do
     expect(record['itemTransferResponses'].first['message']).to eq('Source item is not under source holding')
   end
 
-  it "53. Verify that if the user trying to transfer invalid owning institution holding details to existing bib id's, then application should display an appropriate error message.", number:53 do
+  it "53. Verify that if the user trying to transfer invalid owning institution holding details to existing bib id's, then application should display an appropriate error message.", deprecated:true do
     path = '/sharedCollection/transferHoldingsAndItems'
     # Attempt to transfer item 33333023748987's holding (but intentionally flub the holdingid):
     #       "owningInstitutionBibId": ".b171339083",
@@ -383,7 +383,7 @@ describe 'TransferHoldingsAndItems' do
     expect(record['holdingTransferResponses'].first['message']).to eq('Source holdings is not under source bib')
   end
 
-  it "54. Verify that if the user trying to transfer valid owning institution holding id details to existing bib id's,if that bib contains same owning institution holding id, then the application should display the appropriate error message.", number:54 do
+  it "54. Verify that if the user trying to transfer valid owning institution holding id details to existing bib id's,if that bib contains same owning institution holding id, then the application should display the appropriate error message.", deprecated:true do
 
     # Note: The following barcode and destination_bib params may need to be
     # changed to identify an item that can be moved and a bib that has at least
@@ -432,7 +432,7 @@ describe 'TransferHoldingsAndItems' do
     expect(record['holdingTransferResponses'].first['message']).to eq('Source holdings is not under source bib')
   end
 
-  it "55. Verify that if the user trying to transfer new owning institution holding id details to existing bib id's, then the application should display the appropriate error message.", number:55 do
+  it "55. Verify that if the user trying to transfer new owning institution holding id details to existing bib id's, then the application should display the appropriate error message.", deprecated:true do
     barcode = '33433101862419'
     destination_bib = '.b109358983'
 
@@ -476,7 +476,7 @@ describe 'TransferHoldingsAndItems' do
     expect(record['holdingTransferResponses'].first['message']).to eq('Source holdings is not under source bib')
   end
 
-  it "56. Verify that user can create an incomplete record by transfer api with new Bib and new Holding and existing item", number:56 do
+  it "56. Verify that user can create an incomplete record by transfer api with new Bib and new Holding and existing item", deprecated:true do
 
     # This may need to be changed to a barcode that can be transferred
     barcode = '33333211202623'
@@ -532,7 +532,7 @@ describe 'TransferHoldingsAndItems' do
     expect(moved_item['owningInstitutionBibId']).to eq(body[:itemTransfers].first[:destination][:owningInstitutionBibId])
   end
 
-  it "57. Verify that user can create dummy record through transfer api with existing Holding id or existing item id and new bib id.", number:57 do
+  it "57. Verify that user can create dummy record through transfer api with existing Holding id or existing item id and new bib id.", deprecated:true do
     # This may need to be changed to a barcode that can be transferred
     barcode = '33433032580189'
 
@@ -576,7 +576,7 @@ describe 'TransferHoldingsAndItems' do
     expect(record['holdingTransferResponses'].first['message']).to eq('Successfully relinked')
   end
 
-  it "58. Verify that user can transfer holding or item id's for bound with records", number:58 do
+  it "58. Verify that user can transfer holding or item id's for bound with records", deprecated:true do
     # This may need to be changed to a barcode that can be transferred
     #  e.g. 
     #    33433011646076
@@ -630,7 +630,7 @@ describe 'TransferHoldingsAndItems' do
     expect(record['holdingTransferResponses'].first['message']).to eq('Successfully relinked')
   end
 
-  it "59. Verify that user view in search UI for orphan bibs and holdings and they will be soft deleted.", number:59 do
+  it "59. Verify that user view in search UI for orphan bibs and holdings and they will be soft deleted.", deprecated:true do
     # This may need to be changed to a barcode that is a bound with where one of its bibs is *only* linked to the item
     barcode = '33433011646043'
     destination_bib_id = '.b144301295'

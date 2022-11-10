@@ -1,7 +1,7 @@
 require_relative './spec_helper'
 
 describe 'SubmitCollections' do
-  it '5. Verify that SCSB user can modify the item details through submit collection api service.', number:5 do
+  it '6. Verify that the bib/holding/item metadata can be updated through the API, for a given item.', number:6 do
     barcode = '33433034009526'
 
     path = '/sharedCollection/submitCollection?institution=NYPL&isCGDProtected=false'
@@ -48,7 +48,7 @@ describe 'SubmitCollections' do
     expect(item['title']).to eq("#{original_title} #{author}")
   end
 
-  it '6. Verify that when barcode is invalid the exception is returned.', number:6 do
+  it '7. Verify that when barcode is invalid the exception is returned.', number:7 do
     path = '/sharedCollection/submitCollection?institution=NYPL&isCGDProtected=false'
     # Following was generated in QA via recap/nypl-bibs?barcode=33433034009526&customerCode=NA
     body = File.open('./spec/data/nypl-33433034009526.scsbxml').read

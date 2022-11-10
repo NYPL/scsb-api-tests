@@ -4,15 +4,24 @@ describe 'deaccession' do
   it '8. Verify that if multiple items are included in single call, all bibs and holdings are deleted.', number:8 do
     records = [
       {
-        deliveryLocation: 'NP',
-        itemBarcode: '33433088232933'
+        deliveryLocation: 'NA',
+        itemBarcode: '33433117925671'
       },
       {
-        deliveryLocation: 'NP',
-        itemBarcode: '33433064251923'
+        deliveryLocation: 'NA',
+        itemBarcode: '33433012013078'
       }
     ]
 
+    barcodes = records.map { |record| record[:itemBarcode] }
+    Logger.debug "# Fetching target items: #{barcodes.join(', ')}"
+    barcodes.each do |barcode|
+      item = item_by_barcode barcode
+
+      expect(item).to be_a(Hash)
+    end
+
+    Logger.debug "# Deaccessioning items"
     # Deaccession two items:
     response = post '/sharedCollection/deaccession', {
       deAccessionItems: records,
@@ -28,6 +37,7 @@ describe 'deaccession' do
 
     # e.g. {"33433088232933":"Success","33433064251923":"Success"}
 
+    Logger.debug "# Confirming items have been deleted"
     records.map { |r| r[:itemBarcode] }.each do |barcode|
       expect(result[barcode]).to eq('Success')
 
@@ -84,6 +94,7 @@ describe 'deaccession' do
     it '11. Verify that if user provides invalid parameter (other than the barcode) through the deaccession api service, application should display the failure error message.', number:11 do
       path = '/sharedCollection/deaccession'
 
+      # Barcode defined above
       Logger.debug "# Attempting to deaccession #{barcode}, which is invalid (because it has already been deaccessioned)"
 
       body = {
@@ -184,11 +195,11 @@ describe 'deaccession' do
 
     # Sample barcodes:
     #   33433011646076
-    #   33433011646068
     #   33433011646050
     #   33433011646043
     #   33433011646035
-    barcode = '33433011646076'
+    #   33433011646076
+    barcode = '33433011646068'
 
     Logger.debug "# Fetching target item: #{barcode}"
     item = item_by_barcode barcode
@@ -237,7 +248,7 @@ describe 'deaccession' do
     expect { item_by_barcode(barcode) }.to raise_error("Could not find item by barcode: #{barcode}")
   end
 
-  it '8. BOUND WITH: Verify that if user tries to deaccession an item record which has single holding and multiple bibs, then the application should update delete flag for item, holding and bib records.', number:8 do
+  it '8. BOUND WITH: Verify that if user tries to deaccession an item record which has single holding and multiple bibs, then the application should update delete flag for item, holding and bib records.', deprecated:true do
 
     barcode = '33433109761407'
 

@@ -72,8 +72,8 @@ describe 'deaccession' do
     expect(record[barcode]).to eq('Failure - The requested item has already been deaccessioned.')
   end
 
-  describe 'Test 10' do
-    barcode = '33433120661248'
+  describe 'Test 9' do
+    barcode = 'qwerty'
 
     before(:each) do
       # Ensure item is already deaccessioned
@@ -88,10 +88,10 @@ describe 'deaccession' do
       }
 
       resp = post '/sharedCollection/deaccession', body
-      p resp
     end
 
-    it '11. Verify that if user provides invalid parameter (other than the barcode) through the deaccession api service, application should display the failure error message.', deprecated:true do
+    # Note: This test is oddly worded, but it's really a test of the API response to invalid barcodes
+    it '9. Verify that if user provides invalid parameter (other than the barcode) through the deaccession api service, application should display the failure error message.', number:9 do
       path = '/sharedCollection/deaccession'
 
       # Barcode defined above
@@ -117,7 +117,7 @@ describe 'deaccession' do
       # e.g. {"33433120661248":"Failure - The requested item has already been deaccessioned."}
 
       expect(record).to be_a(Hash)
-      expect(record[barcode]).to eq('Failure - The requested item has already been deaccessioned.')
+      expect(record[barcode]).to eq('Failure - Item barcode doesn\'t exist in SCSB database.')
     end
   end
 

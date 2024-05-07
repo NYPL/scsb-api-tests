@@ -10,6 +10,7 @@ Tests are assigned numbers from these NYPL test sheets, which include criteria a
  - [Nov 15 2021 NYPL Test sheet (Phase IV, Stage 3 round 2)](https://docs.google.com/spreadsheets/d/1rczCw7KepBDqSXOAbQDrXyIyE58SEF7u_xrXGCsP24U)
  - [June 2022 Release - UAT Test Cases - Regression)](https://docs.google.com/spreadsheets/d/1dmq2klImquGSY3hykRNxzgxIJ6qXfMumt3jbjtBt0ek)
  - [Dec 2022 Release - UAT Test Cases - Regression](https://docs.google.com/spreadsheets/d/1djlZfAdjYl6SLtXgZY75s9DLcWYeJgV0wZfY8Kpy65M/edit#gid=715491896)
+ - [May 7 2024](https://docs.google.com/spreadsheets/d/1NVsZdlNuyvJpz279n-WVOsR4WdtS7TZtDTdtKrSbtt8/edit#gid=715491896)
 
 ## Setup
 

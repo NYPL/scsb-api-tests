@@ -78,7 +78,7 @@ describe 'Request Item Rest Controller' do
       }
     end
 
-    it '1. Verify that Recap user can request the item through API workflow.', number:1 do
+    it '1. Verify that a request can be created through the API.', number:1 do
       path = '/requestItem/requestItem'
 
       barcode = body[:itemBarcodes].first

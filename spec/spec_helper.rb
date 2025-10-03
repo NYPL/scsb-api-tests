@@ -103,7 +103,7 @@ end
 
 
 def post (path, body = nil , options = {})
-  Logger.debug "POSTing the following to #{path}:\n\n#{body.nil? ? '""' : body.to_json}"
+  # Logger.debug "POSTing the following to #{path}:\n#{body.nil? ? '""' : body.to_json}\n"
 
   uri = URI.parse("#{ENV['BASE_URL']}#{path}")
 

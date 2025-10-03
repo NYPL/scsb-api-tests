@@ -1,15 +1,15 @@
 require_relative './spec_helper'
 
 describe 'deaccession' do
-  it '8. Verify that if multiple items are included in single call, all bibs and holdings are deleted.', number:8 do
+  it '7. Verify that if multiple items are included in single call, all bibs and holdings are deleted.', number:7 do
     records = [
       {
-        deliveryLocation: 'NA',
-        itemBarcode: '33433117925671'
+        deliveryLocation: 'NP',
+        itemBarcode: '33433036391161'
       },
       {
         deliveryLocation: 'NA',
-        itemBarcode: '33433012013078'
+        itemBarcode: '33433069150997'
       }
     ]
 
@@ -32,8 +32,6 @@ describe 'deaccession' do
     expect(response['Content-Type']).to match(/^application\/json/)
 
     result = JSON.parse response.body
-
-    p result
 
     # e.g. {"33433088232933":"Success","33433064251923":"Success"}
 
@@ -72,7 +70,7 @@ describe 'deaccession' do
     expect(record[barcode]).to eq('Failure - The requested item has already been deaccessioned.')
   end
 
-  describe 'Test 9' do
+  describe 'Test 8' do
     barcode = 'qwerty'
 
     before(:each) do
@@ -91,7 +89,7 @@ describe 'deaccession' do
     end
 
     # Note: This test is oddly worded, but it's really a test of the API response to invalid barcodes
-    it '9. Verify that if user provides invalid parameter (other than the barcode) through the deaccession api service, application should display the failure error message.', number:9 do
+    it '8. Verify that if user provides invalid barcode through the deaccession api service, application should display the failure error message.', number:8 do
       path = '/sharedCollection/deaccession'
 
       # Barcode defined above

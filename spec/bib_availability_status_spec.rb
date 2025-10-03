@@ -3,8 +3,7 @@ require_relative './spec_helper'
 describe 'BibAvailabilityStatus' do
   it '3. Verify availability returned when an item is looked up by BIB ID and owning institution', number:3 do
     [
-      # This one is (at writing) requested in test number:1, so we expect that
-      # test to have been run first, resulting in the following status:
+      # These may need to be updated to reference a couple items with different statuses:
       {
         bibid: '.b139146222',
         items: [

@@ -1,7 +1,7 @@
 require_relative './spec_helper'
 
 describe 'SubmitCollections' do
-  it '5. Verify that the bib/holding/item metadata can be updated through the API, for a given item.', number:5do
+  it '5. Verify that the bib/holding/item metadata can be updated through the API, for a given item.', number:5 do
     barcode = '33433034009526'
 
     path = '/sharedCollection/submitCollection?institution=NYPL&isCGDProtected=false'

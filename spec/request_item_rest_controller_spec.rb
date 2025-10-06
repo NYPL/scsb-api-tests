@@ -64,15 +64,15 @@ describe 'Request Item Rest Controller' do
     body = nil
     before(:each) do
       body = {
-        author: " Panama-Pacific International Exposition Company.  ",
-        bibId: 7825107,
+        author: "Fitch, John, 1917- ",
+        bibId: 6052616,
         deliveryLocation: 'NH',
         itemBarcodes: [
-          '33433116343660'
+          '33433022997773'
         ],
         itemOwningInstitution: "NYPL",
         patronBarcode: '23333090799527',
-        titleIdentifier: "An account of the closing exercises of the Panama-Pacific international exposition, San Francisco, December fourth, 1915.",
+        titleIdentifier: "Adventure on wheels; the autobiography of a road racing champion by John Fitch, with William W. Nolan.",
         requestType: 'RETRIEVAL',
         requestingInstitution: 'NYPL'
       }

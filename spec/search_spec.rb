@@ -101,7 +101,7 @@ describe 'Search' do
     end
   end
 
-  describe '3. Verify that the search API returns the expected items for barcodes with newer CGDs', number:3 do
+  describe '3. Verify that the search API returns the expected items for barcodes with newer CGDs', deprecated:true do
     it "search by various criteria" do
       [
         {

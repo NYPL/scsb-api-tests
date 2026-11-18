@@ -1,14 +1,14 @@
 require_relative './spec_helper'
 
 describe 'Search' do
-  describe '2. Verify that the search API returns the expected items.', number:2 do
-    it "search by various criteria" do
+  describe '2. Verify that the search API returns the expected items.' do
+    it 'search by various criteria' do
       [
         {
           query: {
             fieldValue: '0713998067',
             fieldName: 'ISBN',
-            owningInstitutions: ['PUL', 'CUL', 'NYPL', 'HL']
+            owningInstitutions: %w[PUL CUL NYPL HL]
           },
           target: {
             barcode: 'CU74585878'
@@ -31,7 +31,7 @@ describe 'Search' do
             owningInstitutions: ['HL']
           },
           target: {
-            barcode: 'HX295W',
+            barcode: 'HX295W'
           }
         },
         {
@@ -41,7 +41,7 @@ describe 'Search' do
             owningInstitutions: ['PUL']
           },
           target: {
-            barcode: '32101099217760',
+            barcode: '32101099217760'
           }
         },
         {
@@ -63,12 +63,12 @@ describe 'Search' do
           target: nil
         }
       ].each do |expectation|
-      query = expectation[:query]
-      target = expectation[:target]
+        query = expectation[:query]
+        target = expectation[:target]
 
         path = '/searchService/search'
 
-        Logger.debug "______________________________________________"
+        Logger.debug '______________________________________________'
         Logger.debug "Querying #{query[:fieldName]} #{query[:fieldValue]} (OI #{query[:owningInstitutions].join(',')})"
         body = {
           "deleted": false,
@@ -80,20 +80,20 @@ describe 'Search' do
         response = post path, body
 
         expect(response.code.to_i).to eq(200)
-        expect(response['Content-Type']).to match(/^application\/json/)
+        expect(response['Content-Type']).to match(%r{^application/json})
 
         record = JSON.parse response.body
         expect(record).to be_a(Hash)
-        expect(record["searchResultRows"]).to be_a(Array)
+        expect(record['searchResultRows']).to be_a(Array)
 
-        if (target.nil?)
-          expect(record["searchResultRows"]).to be_empty
-          Logger.debug "Found 0 results as expected"
+        if target.nil?
+          expect(record['searchResultRows']).to be_empty
+          Logger.debug 'Found 0 results as expected'
         else
-          expect(record["searchResultRows"].first).to be_a(Hash)
+          expect(record['searchResultRows'].first).to be_a(Hash)
           # Expect match to have an OI that agrees with query:
-          expect(query[:owningInstitutions]).to include(record["searchResultRows"].first["owningInstitution"])
-          expect(record["searchResultRows"].first["barcode"]).to eq(target[:barcode])
+          expect(query[:owningInstitutions]).to include(record['searchResultRows'].first['owningInstitution'])
+          expect(record['searchResultRows'].first['barcode']).to eq(target[:barcode])
 
           Logger.debug "Found #{target[:barcode]} in response\n"
         end
@@ -101,8 +101,8 @@ describe 'Search' do
     end
   end
 
-  describe '3. Verify that the search API returns the expected items for barcodes with newer CGDs', deprecated:true do
-    it "search by various criteria" do
+  describe '3. Verify that the search API returns the expected items for barcodes with newer CGDs', deprecated: true do
+    it 'search by various criteria' do
       [
         {
           query: {
@@ -116,13 +116,12 @@ describe 'Search' do
           }
         }
       ].each do |expectation|
-
-      query = expectation[:query]
-      target = expectation[:target]
+        query = expectation[:query]
+        target = expectation[:target]
 
         path = '/searchService/search'
 
-        Logger.debug "______________________________________________"
+        Logger.debug '______________________________________________'
         Logger.debug "Querying #{query[:fieldName]} #{query[:fieldValue]} (OI #{query[:owningInstitutions].join(',')})"
         body = {
           "deleted": false,
@@ -134,20 +133,20 @@ describe 'Search' do
         response = post path, body
 
         expect(response.code.to_i).to eq(200)
-        expect(response['Content-Type']).to match(/^application\/json/)
+        expect(response['Content-Type']).to match(%r{^application/json})
 
         record = JSON.parse response.body
         expect(record).to be_a(Hash)
-        expect(record["searchResultRows"]).to be_a(Array)
+        expect(record['searchResultRows']).to be_a(Array)
 
-        if (target.nil?)
-          expect(record["searchResultRows"]).to be_empty
-          Logger.debug "Found 0 results as expected"
+        if target.nil?
+          expect(record['searchResultRows']).to be_empty
+          Logger.debug 'Found 0 results as expected'
         else
-          expect(record["searchResultRows"].first).to be_a(Hash)
+          expect(record['searchResultRows'].first).to be_a(Hash)
           # Expect match to have an OI that agrees with query:
-          expect(query[:owningInstitutions]).to include(record["searchResultRows"].first["owningInstitution"])
-          expect(record["searchResultRows"].first["barcode"]).to eq(target[:barcode])
+          expect(query[:owningInstitutions]).to include(record['searchResultRows'].first['owningInstitution'])
+          expect(record['searchResultRows'].first['barcode']).to eq(target[:barcode])
 
           Logger.debug "Found #{target[:barcode]} in response"
         end

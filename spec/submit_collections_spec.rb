@@ -1,7 +1,7 @@
 require_relative './spec_helper'
 
 describe 'SubmitCollections' do
-  it '5. Verify that the bib/holding/item metadata can be updated through the API, for a given item.', number:5 do
+  it 'Verify that the bib/holding/item metadata can be updated through the API, for a given item.', number: 6 do
     barcode = '33433034009526'
 
     path = '/sharedCollection/submitCollection?institution=NYPL&isCGDProtected=false'
@@ -19,7 +19,7 @@ describe 'SubmitCollections' do
 
     expect(response.code.to_i).to eq(200)
     # This is the required Content-Type even though we're sending XML:
-    expect(response['Content-Type']).to match(/^application\/json/)
+    expect(response['Content-Type']).to match(%r{^application/json})
 
     record = JSON.parse response.body
 
@@ -31,24 +31,24 @@ describe 'SubmitCollections' do
     expect(record.first['itemBarcode']).to eq(barcode)
     expect(record.first['message']).to eq('Success record')
 
-    Logger.debug "# Verifying title updated"
+    Logger.debug '# Verifying title updated'
     item = item_by_barcode(barcode)
     expect(item).to be_a(Hash)
     expect(item['barcode']).to eq(barcode)
     expect(item['title']).to eq("#{title_node.content} #{author}")
 
-    Logger.debug "# Reverting doc to original"
+    Logger.debug '# Reverting doc to original'
     body = File.open("./spec/data/nypl-#{barcode}.scsbxml").read
-    response = post path, body
+    post path, body
 
-    Logger.debug "# Verifying title reverted"
+    Logger.debug '# Verifying title reverted'
     item = item_by_barcode(barcode)
     expect(item).to be_a(Hash)
     expect(item['barcode']).to eq(barcode)
     expect(item['title']).to eq("#{original_title} #{author}")
   end
 
-  it '6. Verify that when barcode is invalid the exception is returned.', number:6 do
+  it 'Verify that when barcode is invalid the exception is returned.', number: 7 do
     path = '/sharedCollection/submitCollection?institution=NYPL&isCGDProtected=false'
     # Following was generated in QA via recap/nypl-bibs?barcode=33433034009526&customerCode=NA
     body = File.open('./spec/data/nypl-33433034009526.scsbxml').read
@@ -60,7 +60,7 @@ describe 'SubmitCollections' do
 
     expect(response.code.to_i).to eq(200)
     # This is the required Content-Type even though we're sending XML:
-    expect(response['Content-Type']).to match(/^application\/json/)
+    expect(response['Content-Type']).to match(%r{^application/json})
 
     record = JSON.parse response.body
 

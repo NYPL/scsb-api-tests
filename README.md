@@ -12,6 +12,7 @@ Tests are assigned numbers from these NYPL test sheets, which include criteria a
  - [Dec 2022 Release - UAT Test Cases - Regression](https://docs.google.com/spreadsheets/d/1djlZfAdjYl6SLtXgZY75s9DLcWYeJgV0wZfY8Kpy65M/edit#gid=715491896)
  - [May 7 2024](https://docs.google.com/spreadsheets/d/1NVsZdlNuyvJpz279n-WVOsR4WdtS7TZtDTdtKrSbtt8/edit#gid=715491896)
  - [Oct 2025](https://docs.google.com/spreadsheets/d/1W3DmoNia-EsqjMAbTXyrYAKw9YKzA6r1mp8oEjp-Sk4/edit?gid=715491896#gid=715491896)
+ - [Nov 2026](https://docs.google.com/spreadsheets/d/11uEMx_N1XH9Z7hU4CDj9VoTcSMLWbkrDWh0wx-zmE0A/edit?gid=715491896#gid=715491896)
 
 ## Setup
 
@@ -26,21 +27,15 @@ Update `.env` with target UAT instance and api key.
 Periodically, a candidate release is made available in the "UAT" environment. Our team will be assigned a number of "API" tests in a large collaborative testing spreadsheet.
 
 For each test we're assigned:
- - Read the test and find the relevant test in this codebase. Note that test numbers across testing sessions are not fixed; A test with "S.No" 3 in the latest testing spreadsheet may actually match test 2 in this test suite. Update the test suite to match the latest spreadsheet.
- - Test numbers in this test suite are given in the `it`/`describe` description and a tag (e.g. `tag:3`). They should match and agree with the "S.No" in the spreadsheet. (When reassigning test numbers, make sure test tags are unique across tests. Remove the tag from the older test in case of conflict.)
+ - Read the test and find the relevant test in this codebase
+ - Update this test suite to ensure the "S.No" value in the spreadsheet matches the relevant test by tag (e.g. `number: 7`)
+ - (When assigning a new test number to a test, make sure the tag isn't duplicated in an older test)
+ - Read the test so that you understand the intent
+ - If the test targets a hard-coded record, verify it exists in a desired state. Consider using `select_random_nypl_*` helper functions to auto-select random records to operate on.
  - Run the test as follows and record the ouput in the "Testers Remarks" column of the spreadsheet and mark it as PASS/FAIL.
-
-If a test can not be performed because it's not understood or you're missing necessary data, mark it as BLOCKED and write an explanation in "Testers Remarks"
-
-## Running tests
-
-Because of the finicky nature of these tests, you'll probably want to run them one at a time as follows:
-1. Read the test so that you understand the intent
-2. Verify that the records implicated in the test exist in a testable state (e.g. if it's a deaccession, confirm that the barcode is Available). Update test to use different barcodes/ids if necessary.
-3. Run the test and record the result and output in the testing spreadsheet.
-
-To run a single test:
 
 ```
 source .env; LOG_LEVEL=debug bundle exec rspec -fd --tag number:7
 ```
+
+If a test can not be performed because it's not understood or you're missing necessary data, mark it as BLOCKED and write an explanation in "Testers Remarks"

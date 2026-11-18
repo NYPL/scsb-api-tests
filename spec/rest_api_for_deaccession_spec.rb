@@ -1,27 +1,30 @@
 require_relative './spec_helper'
 
 describe 'deaccession' do
-  it '7. Verify that if multiple items are included in single call, all bibs and holdings are deleted.', number:7 do
-    records = [
+  it 'Verify that if multiple items are included in single call, all bibs and holdings are deleted.', number: 8 do
+    # Build set of records to deaccession:
+    records = select_random_nypl_barcodes(2, item_count=1).map do |barcode|
       {
-        deliveryLocation: 'NP',
-        itemBarcode: '33433036391161'
-      },
-      {
-        deliveryLocation: 'NA',
-        itemBarcode: '33433069150997'
+        # Assign them a random delivery location (where sent post deaccessioning)
+        deliveryLocation: ['NA', 'NP'].sample,
+        itemBarcode: barcode
       }
-    ]
+    end
 
     barcodes = records.map { |record| record[:itemBarcode] }
     Logger.debug "# Fetching target items: #{barcodes.join(', ')}"
+
+    bibids = []
     barcodes.each do |barcode|
       item = item_by_barcode barcode
 
       expect(item).to be_a(Hash)
+      expect(item['owningInstitutionBibId']).to be_a(String)
+
+      bibids << item['owningInstitutionBibId']
     end
 
-    Logger.debug "# Deaccessioning items"
+    Logger.debug '# Deaccessioning items'
     # Deaccession two items:
     response = post '/sharedCollection/deaccession', {
       deAccessionItems: records,
@@ -29,22 +32,31 @@ describe 'deaccession' do
     }
 
     expect(response.code.to_i).to eq(200)
-    expect(response['Content-Type']).to match(/^application\/json/)
+    expect(response['Content-Type']).to match(%r{^application/json})
 
     result = JSON.parse response.body
 
     # e.g. {"33433088232933":"Success","33433064251923":"Success"}
 
-    Logger.debug "# Confirming items have been deleted"
-    records.map { |r| r[:itemBarcode] }.each do |barcode|
-      expect(result[barcode]).to eq('Success')
+    Logger.debug '# Confirming items have been deleted'
+    records
+      .each { |r| r[:itemBarcode] }
+      .each_with_index do |record, ind|
+        barcode = record[:itemBarcode]
 
-      # Confirm item is gone:
-      expect { item_by_barcode(barcode) }.to raise_error("Could not find item by barcode: #{barcode}")
-    end
+        expect(result[barcode]).to eq('Success')
+
+        # Confirm item is gone:
+        expect { item_by_barcode(barcode) }.to raise_error("Could not find item by barcode: #{barcode}")
+        Logger.debug "#  - Confirmed '#{barcode}' matches nothing"
+
+        bibid = bibids[ind]
+        expect { records_by_bib_id(bibid) }.to raise_error("Could not find item by OwningInstitutionBibId: #{bibid}")
+        Logger.debug "#  - Confirmed '#{bibid}' matches nothing"
+      end
   end
 
-  it '39. Verify that if user provides a barcode that already has been deaccessioned then application should display an error message.', deprecated:true do
+  it 'Verify that if user provides a barcode that already has been deaccessioned then application should display an error message.', number: 9 do
     path = '/sharedCollection/deaccession'
 
     barcode = '33433128993643'
@@ -54,13 +66,14 @@ describe 'deaccession' do
           deliveryLocation: 'NA',
           itemBarcode: barcode
         }
-      ]
+      ],
+      username: ENV['API_USERNAME']
     }
 
     response = post path, body
 
     expect(response.code.to_i).to eq(200)
-    expect(response['Content-Type']).to match(/^application\/json/)
+    expect(response['Content-Type']).to match(%r{^application/json})
 
     record = JSON.parse response.body
 
@@ -85,11 +98,11 @@ describe 'deaccession' do
         username: ENV['API_USERNAME']
       }
 
-      resp = post '/sharedCollection/deaccession', body
+      post '/sharedCollection/deaccession', body
     end
 
-    # Note: This test is oddly worded, but it's really a test of the API response to invalid barcodes
-    it '8. Verify that if user provides invalid barcode through the deaccession api service, application should display the failure error message.', number:8 do
+    # NOTE: This test is oddly worded, but it's really a test of the API response to invalid barcodes
+    it 'Verify that if user provides invalid barcode through the deaccession api service, application should display the failure error message.' do
       path = '/sharedCollection/deaccession'
 
       # Barcode defined above
@@ -108,7 +121,7 @@ describe 'deaccession' do
       response = post path, body
 
       expect(response.code.to_i).to eq(200)
-      expect(response['Content-Type']).to match(/^application\/json/)
+      expect(response['Content-Type']).to match(%r{^application/json})
 
       record = JSON.parse response.body
 
@@ -133,8 +146,8 @@ describe 'deaccession' do
       ]
     end
 
-    it '36. Verify that if user trying to deaccession a single Item record which has multiple item and Holdings attached to it (bound-with) then application should update delete flag for corresponding item and the bib and holding records.', deprecated:true do
-
+    it 'Verify that if user trying to deaccession a single Item record which has multiple item and Holdings attached to it (bound-with) then application should update delete flag for corresponding item and the bib and holding records.',
+       deprecated: true do
       # Deaccession a single item from a multi-item bib:
       response = post '/sharedCollection/deaccession', {
         deAccessionItems: [
@@ -146,7 +159,7 @@ describe 'deaccession' do
       }
 
       expect(response.code.to_i).to eq(200)
-      expect(response['Content-Type']).to match(/^application\/json/)
+      expect(response['Content-Type']).to match(%r{^application/json})
 
       record = JSON.parse response.body
 
@@ -166,8 +179,8 @@ describe 'deaccession' do
     end
   end
 
-  it '37. Application should perform deaccession  for an item but the bib has attached with multiple items. Then, the item should be flagged has deletion and not for bib and holdings.', deprecated:true do
-
+  it 'Application should perform deaccession  for an item but the bib has attached with multiple items. Then, the item should be flagged has deletion and not for bib and holdings.',
+     deprecated: true do
     bnum = '.b131115674'
     items = items_by_bnum bnum
 
@@ -179,18 +192,17 @@ describe 'deaccession' do
     puts "# Verified that #{bnum} has two items. Deaccessioning first.."
 
     path = '/sharedCollection/deaccession'
-    body = { deAccessionItems: [ { deliveryLocation: 'NA', itemBarcode: first_barcode } ] }
-    response = post path, body
+    body = { deAccessionItems: [{ deliveryLocation: 'NA', itemBarcode: first_barcode }] }
+    post path, body
 
     sibling_result = item_by_barcode items.last['barcode']
     expect(sibling_result).to be_a(Hash)
 
     expect { item_by_barcode(first_barcode) }.to raise_error
-
   end
 
-  it '10. BOUND WITH: Verify that if user tries to deaccession a single Item record which has multiple item and holdings attached to it, then the application should update delete flag for corresponding item and the bib and holding records.', deprecated:true do
-
+  it 'BOUND WITH: Verify that if user tries to deaccession a single Item record which has multiple item and holdings attached to it, then the application should update delete flag for corresponding item and the bib and holding records.',
+     deprecated: true do
     # Sample barcodes:
     #   33433011646076
     #   33433011646050
@@ -204,13 +216,13 @@ describe 'deaccession' do
 
     expect(item).to be_a(Hash)
 
-    Logger.debug "# Verifying the item has multiple bibs (is a bound-with)"
+    Logger.debug '# Verifying the item has multiple bibs (is a bound-with)'
     bnums = bnums_by_barcode barcode
     expect(bnums).to be_a(Array)
     expect(bnums.size).to be >= 2
     Logger.debug "#   item has #{bnums.size} bibs"
 
-    Logger.debug "# Verifying the item has multiple holdings ids"
+    Logger.debug '# Verifying the item has multiple holdings ids'
     holdings_ids = holdings_ids_by_barcode barcode
     expect(holdings_ids).to be_a(Array)
     expect(holdings_ids.size).to be >= 2
@@ -232,7 +244,7 @@ describe 'deaccession' do
     response = post path, body
 
     expect(response.code.to_i).to eq(200)
-    expect(response['Content-Type']).to match(/^application\/json/)
+    expect(response['Content-Type']).to match(%r{^application/json})
 
     record = JSON.parse response.body
 
@@ -241,13 +253,13 @@ describe 'deaccession' do
     expect(record).to be_a(Hash)
     expect(record[barcode]).to eq('Success')
 
-    Logger.debug "# Verifying deaccessioned"
+    Logger.debug '# Verifying deaccessioned'
 
     expect { item_by_barcode(barcode) }.to raise_error("Could not find item by barcode: #{barcode}")
   end
 
-  it '8. BOUND WITH: Verify that if user tries to deaccession an item record which has single holding and multiple bibs, then the application should update delete flag for item, holding and bib records.', deprecated:true do
-
+  it 'BOUND WITH: Verify that if user tries to deaccession an item record which has single holding and multiple bibs, then the application should update delete flag for item, holding and bib records.',
+     deprecated: true do
     barcode = '33433109761407'
 
     Logger.debug "# Fetching target item: #{barcode}"
@@ -255,7 +267,7 @@ describe 'deaccession' do
 
     expect(item).to be_a(Hash)
 
-    Logger.debug "# Verifying the item has multiple bibs (is a bound-with)"
+    Logger.debug '# Verifying the item has multiple bibs (is a bound-with)'
     bnums = bnums_by_barcode barcode
     expect(bnums).to be_a(Array)
     expect(bnums.size).to eq(2)
@@ -281,7 +293,7 @@ describe 'deaccession' do
     response = post path, body
 
     expect(response.code.to_i).to eq(200)
-    expect(response['Content-Type']).to match(/^application\/json/)
+    expect(response['Content-Type']).to match(%r{^application/json})
 
     record = JSON.parse response.body
 
@@ -290,7 +302,7 @@ describe 'deaccession' do
     expect(record).to be_a(Hash)
     expect(record[barcode]).to eq('Success')
 
-    Logger.debug "# Verifying deaccessioned"
+    Logger.debug '# Verifying deaccessioned'
 
     expect { item_by_barcode(barcode) }.to raise_error("Could not find item by barcode: #{barcode}")
 

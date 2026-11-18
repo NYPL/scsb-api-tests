@@ -1,7 +1,7 @@
 require_relative './spec_helper'
 
 describe 'BibAvailabilityStatus' do
-  it '3. Verify availability returned when an item is looked up by BIB ID and owning institution', number:3 do
+  it 'Verify availability returned when an item is looked up by BIB ID and owning institution' do
     [
       # These may need to be updated to reference a couple items with different statuses:
       {
@@ -27,13 +27,13 @@ describe 'BibAvailabilityStatus' do
 
       body = {
         "bibliographicId": query[:bibid],
-        "institutionId": "NYPL"
+        "institutionId": 'NYPL'
       }
 
       response = post path, body
 
       expect(response.code.to_i).to eq(200)
-      expect(response['Content-Type']).to match(/^application\/json/)
+      expect(response['Content-Type']).to match(%r{^application/json})
 
       record = JSON.parse response.body
 
@@ -45,8 +45,8 @@ describe 'BibAvailabilityStatus' do
       expect(record.first).to be_a(Hash)
 
       query[:items].each do |item|
-        item_response = record.find { |response_item| response_item["itemBarcode"] == item[:barcode] }
-        expect(item_response["itemAvailabilityStatus"]).to eq(item[:expected_status])
+        item_response = record.find { |response_item| response_item['itemBarcode'] == item[:barcode] }
+        expect(item_response['itemAvailabilityStatus']).to eq(item[:expected_status])
 
         Logger.debug "Found bib #{query[:bibid]}, item #{item[:barcode]} status of '#{item[:expected_status]}', as expected\n"
       end
